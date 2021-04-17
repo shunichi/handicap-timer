@@ -1,0 +1,9 @@
+.elapsed-time {
+  font-size: 2rem;
+  text-align: center;
+  font-family: monospace;
+}
+
+.elapsed-time.alarmed {
+  color: red;
+}
