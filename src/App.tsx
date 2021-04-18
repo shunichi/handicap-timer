@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { TimerContainer } from "./components/containers/TimerContainer";
-import { AppState } from "./State";
+import { TouchArea } from "./components/presentational/TouchArea";
+import { AlarmsForm } from "./components/presentational/AlarmsForm";
+import { AppState, Alarm } from "./State";
 import { getWebAudio } from "./lib/sound";
 
 const initialAppState = (): AppState => {
@@ -50,6 +52,24 @@ const onAlarmed = (state: AppState, id: number): AppState => {
   }
 }
 
+type MainAreaProps = {
+  appState: AppState,
+  started: boolean,
+  setAppAlarmed: (id: number) => void,
+  onResetButton: () => void,
+}
+
+const MainArea: FunctionComponent<MainAreaProps> = (props: MainAreaProps) => {
+  return (<>
+    <TimerContainer
+      startTime={props.appState.startTime}
+      alarms={props.appState.alarms}
+      onAlarmed={props.setAppAlarmed}
+    />
+    <TouchArea onClick={props.onResetButton} />
+  </>);
+}
+
 function App() {
   const [started, setStarted] = useState(false);
   const [appState, setAppState] = useState<AppState>(initialAppState());
@@ -59,20 +79,40 @@ function App() {
     setAppState(resetAppState(appState));
   };
 
+  const onStopButton = () => {
+    setStarted(false);
+  }
+
+  const setAppAlarmed = (id: number): void => setAppState(onAlarmed(appState, id));
+  const onAlarmChanged = (newAlarm: Alarm): void => {
+    const { elapsedSeconds, enabled } = newAlarm;
+    const alarms = appState.alarms.map((alarm) => {
+      if (newAlarm.id === alarm.id) {
+        return { ...alarm, elapsedSeconds, enabled };
+      } else {
+        return alarm;
+      }
+    });
+    setAppState({ ...appState, alarms });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <div className="App-main">
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         {
-          started &&
-          <TimerContainer
-            startTime={appState.startTime}
-            alarms={appState.alarms}
-            onAlarmed={(id: number) => setAppState(onAlarmed(appState, id))}
-          />
+          started ?
+            <MainArea appState={appState} started={started} setAppAlarmed={setAppAlarmed} onResetButton={onResetButton} /> :
+            <AlarmsForm alarms={appState.alarms} onChanged={onAlarmChanged} />
         }
-        <button className="reset-button" onClick={onResetButton}>{started ? "リセット" : "開始"}</button>
-      </header>
+        <div className="App-bottom">
+          {
+            started ?
+              <button className="stop-button" onClick={onStopButton}>停止</button> :
+              <button className="reset-button" onClick={onResetButton}>開始</button>
+          }
+        </div>
+      </div>
     </div>
   );
 }
