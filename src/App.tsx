@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { TimerContainer } from "./components/containers/TimerContainer";
 import { TouchArea } from "./components/presentational/TouchArea";
 import { AlarmsForm } from "./components/presentational/AlarmsForm";
+import { Button } from "./components/input/Button";
 import { AppState, Alarm } from "./State";
 import { getWebAudio } from "./lib/sound";
 
@@ -96,20 +96,20 @@ function App() {
     setAppState({ ...appState, alarms });
   };
 
+  const buttonClassName = "block w-full";
   return (
     <div className="App">
-      <div className="App-main">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
+      <div className="App-main bg-gray-100">
         {
           started ?
             <MainArea appState={appState} started={started} setAppAlarmed={setAppAlarmed} onResetButton={onResetButton} /> :
-            <AlarmsForm alarms={appState.alarms} onChanged={onAlarmChanged} />
+            <AlarmsForm alarms={appState.alarms} onChange={onAlarmChanged} />
         }
-        <div className="App-bottom">
+        <div className="fixed inset-y bottom-0 p-4 w-full">
           {
             started ?
-              <button className="stop-button" onClick={onStopButton}>停止</button> :
-              <button className="reset-button" onClick={onResetButton}>開始</button>
+              <Button variant="danger" className={buttonClassName} onClick={onStopButton}>停止</Button> :
+              <Button variant="primary" className={buttonClassName} onClick={onResetButton}>開始</Button>
           }
         </div>
       </div>

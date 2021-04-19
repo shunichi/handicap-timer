@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import { Timer } from "../presentational/Timer";
+import { TouchMe } from "../presentational/TouchMe";
 import { getWebAudio } from "../../lib/sound";
 import { Alarm } from "./../../State";
 
@@ -37,5 +38,10 @@ export const TimerContainer: FunctionComponent<Props> = (props: Props) => {
     };
   }, [startTime, alarms, onAlarmed]);
 
-  return (<Timer elapsedSeconds={elapsedSeconds} alarmed={false} />);
+  return (
+    <>
+      <Timer elapsedSeconds={elapsedSeconds} alarmed={false} />
+      <TouchMe />
+    </>
+  );
 }
