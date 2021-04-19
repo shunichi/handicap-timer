@@ -16,13 +16,13 @@ type MainAreaProps = {
 
 export const MainArea: FunctionComponent<MainAreaProps> = (props: MainAreaProps) => {
   const { startTime, alarms } = props.appState;
-  const { elapsedSeconds, gauge } = useAlarms({ startTime, alarms, onAlarmed: props.setAppAlarmed });
+  const { gauge } = useAlarms({ startTime, alarms, onAlarmed: props.setAppAlarmed });
 
   const rate = props.timeGaugeEnabled ? gauge.rate : props.rate;
   return (<>
     <TimeGauge rate={rate}>
       <TimerContainer
-        elapsedSeconds={elapsedSeconds}
+        value={gauge.time}
       />
     </TimeGauge>
     <TouchArea onClick={props.onResetButton} />

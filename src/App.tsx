@@ -142,7 +142,7 @@ function App() {
           }
           {
             started ?
-              <Button variant="danger" className={buttonClassName} onClick={onStopButton}>トメル</Button> :
+              <Button variant="danger" className={buttonClassName} onClick={onStopButton}>モドル</Button> :
               <Button variant="primary" className={buttonClassName} onClick={onResetButton}>ハジメル</Button>
           }
         </div>

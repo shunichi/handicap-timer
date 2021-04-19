@@ -14,7 +14,6 @@ export const AlarmForm: FunctionComponent<Props> = (props: Props) => {
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     let elapsed = 0;
-    console.log("changed");
     if (event.currentTarget.value !== "") {
       const parsed = parseFloat(event.currentTarget.value);
       if (!isNaN(parsed)) {

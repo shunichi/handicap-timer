@@ -17,14 +17,15 @@ const calcGaugeValue = (alarms: Alarm[], elapsedSeconds: number): Gauge => {
   const alarmSeconds = alarms
     .filter((alarm) => alarm.enabled && alarm.elapsedSeconds > 0)
     .map((alarm) => alarm.elapsedSeconds)
-  const uniqueAlarmSeconds = [...new Set(alarmSeconds)].sort();
+  const uniqueAlarmSeconds = [...new Set(alarmSeconds)].sort((a, b) => a - b);
   uniqueAlarmSeconds.unshift(0);
   const passed = uniqueAlarmSeconds.filter((value) => value < elapsedSeconds)
   if (passed.length > 0 && passed.length < uniqueAlarmSeconds.length) {
-    const startTime = uniqueAlarmSeconds[passed.length];
-    const duration = uniqueAlarmSeconds[passed.length - 1] - startTime;
-    const restSeconds = elapsedSeconds - startTime;
-    return { time: restSeconds - startTime, rate: restSeconds / duration };
+    const startTime = uniqueAlarmSeconds[passed.length - 1];
+    const endTime = uniqueAlarmSeconds[passed.length];
+    const duration = endTime - startTime;
+    const restSeconds = endTime - elapsedSeconds;
+    return { time: restSeconds, rate: restSeconds / duration };
   } else {
     return { time: 0, rate: 0 };
   }

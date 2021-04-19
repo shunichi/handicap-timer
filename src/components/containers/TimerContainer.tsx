@@ -3,13 +3,13 @@ import { Timer } from "../presentational/Timer";
 import { TouchMe } from "../presentational/TouchMe";
 
 type Props = {
-  elapsedSeconds: number,
+  value: number,
 };
 
 export const TimerContainer: FunctionComponent<Props> = (props: Props) => {
   return (
     <div>
-      <Timer elapsedSeconds={props.elapsedSeconds} alarmed={false} />
+      <Timer elapsedSeconds={props.value} alarmed={false} />
       <TouchMe />
     </div>
   );
