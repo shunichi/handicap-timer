@@ -2,10 +2,12 @@ import React, { FunctionComponent, useState } from 'react';
 import './App.css';
 import { TimerContainer } from "./components/containers/TimerContainer";
 import { TouchArea } from "./components/presentational/TouchArea";
+import { TimeGauge } from "./components/presentational/TimeGauge";
 import { AlarmsForm } from "./components/presentational/AlarmsForm";
 import { Button } from "./components/input/Button";
 import { AppState, Alarm } from "./State";
 import { getWebAudio } from "./lib/sound";
+import { useAlarms } from "./lib/useAlarms";
 
 const initialAppState = (): AppState => {
   return {
@@ -60,11 +62,13 @@ type MainAreaProps = {
 }
 
 const MainArea: FunctionComponent<MainAreaProps> = (props: MainAreaProps) => {
+  const { startTime, alarms } = props.appState;
+  const { elapsedSeconds, gauge } = useAlarms({ startTime, alarms, onAlarmed: props.setAppAlarmed });
+
   return (<>
+    <TimeGauge rate={gauge.rate} />
     <TimerContainer
-      startTime={props.appState.startTime}
-      alarms={props.appState.alarms}
-      onAlarmed={props.setAppAlarmed}
+      elapsedSeconds={elapsedSeconds}
     />
     <TouchArea onClick={props.onResetButton} />
   </>);
