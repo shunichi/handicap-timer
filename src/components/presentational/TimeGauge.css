@@ -1,0 +1,13 @@
+.time-gauge-container {
+  width: 80vmin;
+  height: 80vmin;
+}
+
+.time-gauge-rotation {
+  transform: rotate(270deg);
+}
+
+.time-gauge-inner {
+  width: 65vmin;
+  height: 65vmin;
+}

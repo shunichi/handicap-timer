@@ -7,7 +7,7 @@ type Props = {
 };
 
 const fomratSeconds = (seconds: number): string => {
-  const frac = `00${Math.floor(seconds * 100).toString()}`.slice(-2);
+  const frac = `0${Math.floor(seconds * 100).toString()}`.slice(-2);
   return `${Math.floor(seconds).toString()}.${frac}`;
 }
 

@@ -8,9 +8,9 @@ type Props = {
 
 export const TimerContainer: FunctionComponent<Props> = (props: Props) => {
   return (
-    <>
+    <div>
       <Timer elapsedSeconds={props.elapsedSeconds} alarmed={false} />
       <TouchMe />
-    </>
+    </div>
   );
 }
