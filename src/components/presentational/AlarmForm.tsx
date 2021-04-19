@@ -26,7 +26,7 @@ export const AlarmForm: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <div className="my-4">
-      <label className="text-base text-gray-600">{props.label}</label>
+      <label className="text-base text-gray-600 wf-nikomoji">{props.label}</label>
       <NumberInput
         value={alarm.enabled ? alarm.elapsedSeconds : undefined}
         step="1"
