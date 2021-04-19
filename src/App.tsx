@@ -1,13 +1,10 @@
 import React, { FunctionComponent, useState } from 'react';
 import './App.css';
-import { TimerContainer } from "./components/containers/TimerContainer";
-import { TouchArea } from "./components/presentational/TouchArea";
-import { TimeGauge } from "./components/presentational/TimeGauge";
+import { MainArea } from "./components/containers/MainArea";
 import { AlarmsForm } from "./components/presentational/AlarmsForm";
 import { Button } from "./components/input/Button";
 import { AppState, Alarm } from "./State";
 import { getWebAudio } from "./lib/sound";
-import { useAlarms } from "./lib/useAlarms";
 import { isDebugMode } from "./lib/debugMode";
 
 const initialAppState = (): AppState => {
@@ -16,13 +13,13 @@ const initialAppState = (): AppState => {
     alarms: [
       {
         id: 1,
-        elapsedSeconds: 20.0,
+        elapsedSeconds: 3.0,
         alarmed: false,
         enabled: true,
       },
       {
         id: 2,
-        elapsedSeconds: 30.0,
+        elapsedSeconds: 6.0,
         alarmed: false,
         enabled: false,
       },
@@ -55,34 +52,43 @@ const onAlarmed = (state: AppState, id: number): AppState => {
   }
 }
 
-type MainAreaProps = {
-  appState: AppState,
-  started: boolean,
-  setAppAlarmed: (id: number) => void,
-  onResetButton: () => void,
+type DebugProps = {
   rate: number,
   timeGaugeEnabled: boolean,
+  onRateChanged: (rate: number) => void,
+  onCheckboxChanged: (value: boolean) => void,
 }
 
-const MainArea: FunctionComponent<MainAreaProps> = (props: MainAreaProps) => {
-  const { startTime, alarms } = props.appState;
-  const { elapsedSeconds, gauge } = useAlarms({ startTime, alarms, onAlarmed: props.setAppAlarmed });
-
-  const rate = props.timeGaugeEnabled ? gauge.rate : props.rate;
-  return (<>
-    <TimeGauge rate={rate}>
-      <TimerContainer
-        elapsedSeconds={elapsedSeconds}
-      />
-    </TimeGauge>
-    <TouchArea onClick={props.onResetButton} />
-  </>);
-}
+const Debug: FunctionComponent<DebugProps> = (props: DebugProps) => {
+  return (
+    <>
+      <div>{props.rate}</div>
+      <div className="mb-3">
+        <input
+          type="range"
+          min="0"
+          max="1.0"
+          step="0.05"
+          value={props.rate}
+          onChange={(e) => props.onRateChanged(parseFloat(e.currentTarget.value))}
+        />
+      </div>
+      <label className="mb-4 block text-base">
+        <input
+          type="checkbox"
+          checked={props.timeGaugeEnabled}
+          onChange={(e) => props.onCheckboxChanged(e.currentTarget.checked)}
+        />
+        <span className="ml-2">時間ゲージ</span>
+      </label>
+    </>
+  );
+};
 
 function App() {
   const [started, setStarted] = useState(false);
   const [appState, setAppState] = useState<AppState>(initialAppState());
-  const [rate, setRate] = useState(1);
+  const [rate, setRate] = useState(0.5);
   const [timeGaugeEnabled, setTimeGaugeEnabled] = useState(true);
 
   const onResetButton = () => {
@@ -127,27 +133,12 @@ function App() {
         <div className="fixed inset-y bottom-0 p-4 App-bottom">
           {
             isDebugMode() &&
-            <>
-              <div>{rate}</div>
-              <div className="mb-3">
-                <input
-                  type="range"
-                  min="0"
-                  max="1.0"
-                  step="0.05"
-                  value={rate}
-                  onChange={(e) => setRate(parseFloat(e.currentTarget.value))}
-                />
-              </div>
-              <label className="mb-4 block text-base">
-                <input
-                  type="checkbox"
-                  checked={timeGaugeEnabled}
-                  onChange={e => setTimeGaugeEnabled(e.currentTarget.checked)}
-                />
-                <span className="ml-2">時間ゲージ</span>
-              </label>
-            </>
+            <Debug
+              rate={rate}
+              timeGaugeEnabled={timeGaugeEnabled}
+              onRateChanged={(value) => setRate(value)}
+              onCheckboxChanged={(value) => setTimeGaugeEnabled(value)}
+            />
           }
           {
             started ?

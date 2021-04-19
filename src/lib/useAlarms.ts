@@ -55,7 +55,6 @@ export const useAlarms = (props: Props) => {
     }, 1000/60);
 
     return () => {
-      console.log(`clearInterval ${startTime}`);
       clearInterval(timer);
     };
   }, [startTime, alarms, onAlarmed]);
