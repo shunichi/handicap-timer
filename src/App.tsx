@@ -107,7 +107,7 @@ function App() {
     setAppState({ ...appState, alarms });
   };
 
-  const buttonClassName = "block w-full";
+  const buttonClassName = "block w-full wf-nikomoji text-xl";
   return (
     <div className="App">
       <div className="App-main bg-gray-100">
@@ -151,8 +151,8 @@ function App() {
           }
           {
             started ?
-              <Button variant="danger" className={buttonClassName} onClick={onStopButton}>停止</Button> :
-              <Button variant="primary" className={buttonClassName} onClick={onResetButton}>開始</Button>
+              <Button variant="danger" className={buttonClassName} onClick={onStopButton}>トメル</Button> :
+              <Button variant="primary" className={buttonClassName} onClick={onResetButton}>ハジメル</Button>
           }
         </div>
       </div>
